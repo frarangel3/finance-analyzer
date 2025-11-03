@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-
+import { sampleTransactions } from './sampleData';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className='App'>
+			<header className='App-header'>
+				<h1>Personal Finance Analyzer</h1>
+				<p>Track and visualize your spending</p>
+			</header>
+			<main className='main-content'>
+				<h2>Recent Transactions</h2>
+
+				<table className='transaction-table'>
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Description</th>
+							<th>Category</th>
+							<th>amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						{sampleTransactions.map((transaction) => (
+							<tr key={transaction.id}>
+								<td>{transaction.date}</td>
+								<td>{transaction.description}</td>
+								<td>{transaction.category}</td>
+								<td>{transaction.amount.toFixed(2)}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</main>
+		</div>
+	);
 }
 
 export default App;
