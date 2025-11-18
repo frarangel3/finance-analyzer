@@ -1,6 +1,26 @@
 import React from 'react';
 import './App.css';
 import { sampleTransactions } from './sampleData';
+import {
+	PieChart,
+	Pie,
+	Cell,
+	ResponsiveContainer,
+	Legend,
+	Tooltip,
+} from 'recharts';
+
+const COLORS = [
+	'#667eea',
+	'#764ba2',
+	'#f093fb',
+	'#4facfe',
+	'#43e97b',
+	'#fa709a',
+	'#fee140',
+	'#30cfd0',
+];
+
 function App() {
 	// CALCULATION 1:  Total spending
 	const totalSpent = sampleTransactions.reduce((sum, transaction) => {
@@ -25,6 +45,12 @@ function App() {
 		categoryTotals[a] > categoryTotals[b] ? a : b
 	);
 	const topCategoryAmount = categoryTotals[topCategory];
+
+	// CALCULATION 5: Transform category date for pie chart
+	const chartData = Object.keys(categoryTotals).map((category) => ({
+		name: category,
+		value: categoryTotals[category],
+	}));
 
 	return (
 		<div className='App'>
@@ -74,6 +100,39 @@ function App() {
 							})}
 							spent
 						</p>
+					</div>
+				</div>
+				<div>
+					{/* Pie Chart Section */}
+					<div className='chart-section'>
+						<h2>Spending by Category</h2>
+						<ResponsiveContainer
+							width='100%'
+							height={400}>
+							<PieChart>
+								<Pie
+									data={chartData}
+									cx='50%'
+									cy='50%'
+									labelLine={false}
+									outerRadius={120}
+									fill='#8884d8'
+									dataKey='value'>
+									{chartData.map((entry, index) => (
+										<Cell
+											key={`cell-${index}`}
+											fill={COLORS[index % COLORS.length]}
+										/>
+									))}
+								</Pie>
+								<Tooltip
+									formatter={(value) =>
+										`$${value.toFixed(2)}`
+									}
+								/>
+								<Legend />
+							</PieChart>
+						</ResponsiveContainer>
 					</div>
 				</div>
 
