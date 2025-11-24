@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { sampleTransactions } from './sampleData';
 import {
@@ -22,19 +22,107 @@ const COLORS = [
 ];
 
 function App() {
+	// State to hold transactions(starts with sample data)
+	const [transactions, setTransactions] = useState(sampleTransactions);
+	const [uploadError, setUploadError] = useState(null);
+	// Handle the CSV file upload
+	const handleFileUpload = (event) => {
+		const file = event.target.files[0];
+
+		// Check if file exist
+		if (!file) return;
+
+		// Check if it's CSV
+		if (!file.name.endsWith('.csv')) {
+			setUploadError('Please upload a CSV file');
+			return;
+		}
+
+		// Clear and previous errors
+		setUploadError(null);
+
+		// Use Papaparse to read
+		const Papa = require('papaparse');
+
+		Papa.parse(file, {
+			header: true,
+			dynamicTyping: true,
+			skipEmptyLines: true,
+			transformHeader: (header) => header.toLowerCase().trim(),
+			complete: (results) => {
+				// Validate the data
+				const data = results.data;
+
+				// Check if we have data
+				if (!data || data.length === 0) {
+					setUploadError('CSV file is empty');
+					return;
+				}
+
+				// Check for required columns (case-insensitive)
+				const firstRow = data[0];
+				const requiredColumns = [
+					'date',
+					'description',
+					'amount',
+					'category',
+				];
+				// Convert all columns to lowercase for comparison
+				const columnsLowerCase = Object.keys(firstRow).map(col =>
+					col.toLowerCase()
+				);
+
+				const hasAllColumns = requiredColumns.every(col =>
+					columnsLowerCase.includes(col.toLowerCase())
+				);
+
+				if (!hasAllColumns) {
+					setUploadError(
+						'CSV must have columns: date, description, amount, category (not case sensitive)'
+					);
+					return;
+				}
+				// Transform data to match our format (add IDs)
+				const transformedData = data.map((row, index) => ({
+					id: index + 1,
+					date: row.date,
+					description: row.description,
+					amount: parseFloat(row.amount),
+					category: row.category,
+				}));
+				// Filter and rows with missing data
+				const validData = transformedData.filter(
+					(row) =>
+						row.date &&
+						row.description &&
+						!isNaN(row.amount) &&
+						row.category
+				);
+				if (validData.length === 0) {
+					setUploadError('No Valid transaction found in CSV');
+					return;
+				}
+				// Success! Update state with new data
+				setTransactions(validData);
+			},
+			error: (error) => {
+				setUploadError(`Error parsing CSV: ${error.message}`);
+			},
+		});
+	};
 	// CALCULATION 1:  Total spending
-	const totalSpent = sampleTransactions.reduce((sum, transaction) => {
+	const totalSpent = transactions.reduce((sum, transaction) => {
 		return sum + transaction.amount;
 	}, 0);
 
 	// CALCULATION 2: Transaction Count
-	const transactionCount = sampleTransactions.length;
+	const transactionCount = transactions.length;
 
 	// CALCULATION 3: Average Transaction
 	const averageTransaction = totalSpent / transactionCount;
 
 	// CALCULATION 4: Group by Category and Find Top Category
-	const categoryTotals = sampleTransactions.reduce((acc, transaction) => {
+	const categoryTotals = transactions.reduce((acc, transaction) => {
 		const category = transaction.category;
 		acc[category] = (acc[category] || 0) + transaction.amount;
 		return acc;
@@ -53,6 +141,7 @@ function App() {
 	}));
 
 	return (
+		// This is the UI
 		<div className='App'>
 			<header className='App-header'>
 				<h1>Personal Finance Analyzer</h1>
@@ -60,6 +149,37 @@ function App() {
 			</header>
 
 			<main className='main-content'>
+				{/* File Upload Section */}
+				<div className='upload-section'>
+					<h2>Upload Your Transactions</h2>
+					<p>
+						{' '}
+						Upload a CSV file with columns: date, description,
+						amount, category
+					</p>
+					<input
+						type='file'
+						accept='csv'
+						onChange={handleFileUpload}
+						className='file-input'
+					/>
+					{uploadError && (
+						<div className='error-message'>{uploadError}</div>
+					)}
+					{transactions.length > 0 &&
+						transactions !== sampleTransactions && (
+							<div className='success-message'>
+								Loaded {transactions.length} transaction from
+								your CSV
+							</div>
+						)}
+					{transactions === sampleTransactions && (
+						<div className='info-message'>
+							Currently Viewing sample data
+						</div>
+					)}
+				</div>
+
 				{/* Stats section */}
 				<div className='stats-grid'>
 					<div className='stat-card'>
@@ -148,7 +268,7 @@ function App() {
 						</tr>
 					</thead>
 					<tbody>
-						{sampleTransactions.map((transaction) => (
+						{transactions.map((transaction) => (
 							<tr key={transaction.id}>
 								<td>{transaction.date}</td>
 								<td>{transaction.description}</td>
