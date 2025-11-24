@@ -1,70 +1,112 @@
-# Getting Started with Create React App
+# Personal Finance Analyzer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A data visualization dashboard for analyzing personal spending patterns. Upload a CSV of bank transactions and see interactive charts, statistics, and insights.
 
-## Available Scripts
+🔗 **Live Demo:** [https://finance-analyzer-nine.vercel.app](https://finance-analyzer-nine.vercel.app)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- 📊 **Interactive Pie Chart** - Visual breakdown of spending by category
+- 📈 **Key Statistics** - Total spent, transaction count, averages, top category
+- 📁 **CSV Upload** - Import your own bank transactions
+- ✅ **Data Validation** - Case-insensitive column checking with robust error handling
+- 🎨 **Responsive Design** - Works on desktop, tablet, and mobile
+- 🔄 **Real-time Updates** - All visualizations update instantly with new data
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## How to Use
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Upload Your Data:**
+   - Click "Choose File" in the upload section
+   - Select a CSV file with columns: `date`, `description`, `amount`, `category`
+   - Column names are case-insensitive
+   - File will be validated and parsed automatically
 
-### `npm test`
+2. **View Your Insights:**
+   - See total spending, transaction count, and averages in stat cards
+   - Explore the pie chart (hover over slices for details)
+   - Browse all transactions in the sortable table
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **CSV Format Example:**
+```csv
+   date,description,amount,category
+   2024-10-01,Whole Foods,87.32,Groceries
+   2024-10-02,Shell Gas,45.00,Transportation
+   2024-10-03,Netflix,15.49,Entertainment
+```
 
-### `npm run build`
+## Technologies Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React 18** - Frontend framework with hooks
+- **Recharts 2.x** - Data visualization library
+- **Papaparse 5.x** - CSV parsing with validation
+- **CSS3** - Custom styling and responsive design
+- **Vercel** - Deployment and hosting
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technical Highlights
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **State Management:** React Hooks (useState) for dynamic data handling
+- **Data Processing:** JavaScript array methods (reduce, map, filter) for analysis
+- **Validation:** Case-insensitive column checking, data type validation, empty row filtering
+- **Error Handling:** User-friendly error messages with color-coded feedback
+- **Calculations:** Data aggregations (sum, average, count, group by category)
+- **Responsive UI:** Mobile-first design with CSS Grid and Flexbox
 
-### `npm run eject`
+## What I Learned
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Working with external libraries (Recharts for charts, Papaparse for CSV)
+- File handling and CSV parsing in JavaScript
+- React state management and component lifecycle
+- Data validation and comprehensive error handling
+- Data transformation and aggregation techniques (reduce, map, filter)
+- Responsive UI design principles and CSS best practices
+- Deploying React apps to production with Vercel
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Local Development
+```bash
+# Clone the repository
+git clone https://github.com/frarangel3/finance-analyzer.git
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Navigate to project directory
+cd finance-analyzer
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Install dependencies
+npm install
 
-## Learn More
+# Start development server
+npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Open http://localhost:3000 in your browser
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Project Structure
+```
+finance-analyzer/
+├── public/
+├── src/
+│   ├── App.js           # Main component with state and logic
+│   ├── App.css          # Styling
+│   ├── sampleData.js    # Sample transaction data
+│   └── index.js         # Entry point
+├── package.json
+└── README.md
+```
 
-### Code Splitting
+## Future Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- [ ] Line chart for spending trends over time
+- [ ] Date range filters for custom time periods
+- [ ] Category filtering and search
+- [ ] Export filtered data as CSV
+- [ ] Bar chart for category comparisons
+- [ ] Dark mode toggle
+- [ ] User accounts and data persistence with backend database
 
-### Analyzing the Bundle Size
+## Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Francisco Rangel**
+- GitHub: [@frarangel3](https://github.com/frarangel3)
+- Portfolio: [https://github.com/frarangel3]
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Built with ❤️ as part of my journey from teaching to software development
